@@ -3,14 +3,13 @@
  [![Build status](https://ci.appveyor.com/api/projects/status/av7l3gc0yhfex8y4/branch/master?svg=true)](https://ci.appveyor.com/project/recp/cglm/branch/master)
 [![Documentation Status](https://readthedocs.org/projects/cglm/badge/?version=latest)](http://cglm.readthedocs.io/en/latest/?badge=latest)
 [![Coverage Status](https://coveralls.io/repos/github/recp/cglm/badge.svg?branch=master)](https://coveralls.io/github/recp/cglm?branch=master)
-[![codecov](https://codecov.io/gh/recp/cglm/branch/master/graph/badge.svg)](https://codecov.io/gh/recp/cglm)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6a62b37d5f214f178ebef269dc4a6bf1)](https://www.codacy.com/app/recp/cglm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=recp/cglm&amp;utm_campaign=Badge_Grade)
 [![Backers on Open Collective](https://opencollective.com/cglm/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/cglm/sponsors/badge.svg)](#sponsors)
 
 #### Documentation
 
-Almost all functions (inline versions) and parameters are documented inside the corresponding headers. <br />
+Almost all functions (inline versions) and parameters are documented inside related headers. <br />
 Complete documentation: http://cglm.readthedocs.io
 
 #### Note for previous versions:
@@ -27,13 +26,13 @@ you have the latest version
 - **[major change]** by starting v0.5.1, built-in alignment is removed from **vec3** and **mat3** types
 
 #### Note for C++ developers:
-If you are not aware of the original GLM library yet, you may also want to look at:
+If you don't aware about original GLM library yet, you may also want to look at:
 https://github.com/g-truc/glm
 
 #### Note for new comers (Important):
 - `vec4` and `mat4` variables must be aligned. (There will be unaligned versions later)
 - **in** and **[in, out]** parameters must be initialized (please). But **[out]** parameters not, initializing out param is  also redundant
-- All functions are inline if you don't want to use pre-compiled versions with glmc_ prefix, you can ignore build process. Just include headers.
+- All functions are inline if you don't want to use pre-compiled versions with glmc_ prefix, you can ignore build process. Just incliude headers.
 - if your debugger takes you to cglm headers then make sure you are not trying to copy vec4 to vec3 or alig issues...
 - Welcome!
 
@@ -45,7 +44,7 @@ https://github.com/g-truc/glm
 
 #### Returning vector or matrix... ?
 
-**cglm** supports both *ARRAY API* and *STRUCT API*, so you can return structs if you utilize struct api (`glms_`).
+**cglm** supports both *ARRAY API* and *STRUCT API*, so you can return structs if you you struct api (`glms_`).
 
 #### Other APIs like Vulkan, Metal, Dx?
 Currently *cglm* uses default clip space configuration (-1, 1) for camera functions (perspective, extract corners...), in the future other clip space configurations will be supported
@@ -72,7 +71,7 @@ Currently *cglm* uses default clip space configuration (-1, 1) for camera functi
 - general purpose matrix operations (mat4, mat3)
 - chain matrix multiplication (square only)
 - general purpose vector operations (cross, dot, rotate, proj, angle...)
-- affine transformations
+- affine transforms
 - matrix decomposition (extract rotation, scaling factor)
 - optimized affine transform matrices (mul, rigid-body inverse)
 - camera (lookat)
@@ -88,13 +87,12 @@ Currently *cglm* uses default clip space configuration (-1, 1) for camera functi
 - easing functions
 - curves
 - curve interpolation helpers (S*M*C, deCasteljau...)
-- helpers to convert cglm types to Apple's simd library to pass cglm types to Metal GL without packing them on both sides
-- and others...
+- and other...
 
 <hr />
 
 You have two option to call a function/operation: inline or library call (link)
-Almost all functions are marked inline (always_inline) so compiler will probably inline.
+Almost all functions are marked inline (always_inline) so compiler probably will inline.
 To call pre-compiled version, just use `glmc_` (c stands for 'call') instead of `glm_`.
 
 ```C
@@ -121,7 +119,7 @@ You can pass matrices and vectors as array to functions rather than get address.
   glm_translate(m, (vec3){1.0f, 0.0f, 0.0f});
 ```
 
-Library contains general purpose mat4 mul and inverse functions, and also contains some special forms (optimized) of these functions for affine transformations' matrices. If you want to multiply two affine transformation matrices you can use glm_mul instead of glm_mat4_mul and glm_inv_tr (ROT + TR) instead glm_mat4_inv
+Library contains general purpose mat4 mul and inverse functions but also contains some special form (optimized) of these functions for affine transform matrices. If you want to multiply two affine transform matrices you can use glm_mul instead of glm_mat4_mul and glm_inv_tr (ROT + TR) instead glm_mat4_inv
 ```C
 /* multiplication */
 mat4 modelMat;
@@ -131,31 +129,20 @@ glm_mul(T, R, modelMat);
 glm_inv_tr(modelMat);
 ```
 
-### Struct API
-
-The struct API works as follows, note the `s` suffix on types, the `glms_` prefix on functions and the `GLMS_` prefix on constants:
-
-```C
-#include <cglm/struct.h>
-
-mat4s mat = GLMS_MAT4_IDENTITY_INIT;
-mat4s inv = glms_mat4_inv(mat);
-```
-
-Struct functions generally take their parameters as *values* and *return* their results, rather than taking pointers and writing to out parameters. That means your parameters can usually be `const`, if you're into that.
-
-The types used are actually unions that allow access to the same data multiple ways. One of those ways involves anonymous structures, available since C11. MSVC also supports it for earlier C versions out of the box and GCC/Clang do if you enable `-fms-extensions`. To explicitly enable these anonymous structures, `#define CGLM_USE_ANONYMOUS_STRUCT` to `1`, to disable them, to `0`. For backward compatibility, you can also `#define CGLM_NO_ANONYMOUS_STRUCT` (value is irrelevant) to disable them. If you don't specify explicitly, cglm will do a best guess based on your compiler and the C version you're using.
-
 ## Build
 
 ### Unix (Autotools)
 
 ```bash
+$ sh ./build-deps.sh # run only once (dependencies) [Optional].
+$ # You can pass this step if you don't want to run `make check` for tests.
+$ # cglm uses cmocka for tests and it may reqiure cmake for building it
+$
 $ sh autogen.sh
 $ ./configure
 $ make
-$ make check # [Optional]
-$ [sudo] make install # [Optional]
+$ make check # [Optional] (if you run `sh ./build-deps.sh`)
+$ [sudo] make install
 ```
 
 This will also install pkg-config files so you can use
@@ -170,9 +157,9 @@ pc_path pkg-config` and change the path the files are installed to via
 prefix path to your `PKG_CONFIG_PATH` environment variable.
 
 ### Windows (MSBuild)
-Windows related build file and project files are located in `win` folder,
+Windows related build files, project files are located in `win` folder,
 make sure you are inside `cglm/win` folder.
-Code Analysis is enabled, so it may take awhile to build.
+Code Analysis are enabled, it may take awhile to build
 
 ```Powershell
 $ cd win
@@ -182,10 +169,6 @@ if `msbuild` won't work (because of multi version VS) then try to build with `de
 ```Powershell
 $ devenv cglm.sln /Build Release
 ```
-
-#### Running Tests on Windows
-
-You can see test project in same visual studio solution file. It is enough to run that project to run tests.
 
 ### Building Docs
 First you need install Sphinx: http://www.sphinx-doc.org/en/master/usage/installation.html
@@ -197,11 +180,11 @@ $ sphinx-build source build
 it will compile docs into build folder, you can run index.html inside that function.
 
 ## How to use
-If you want to use the inline versions of functions, then include the main header
+If you want to use inline versions of funcstions then; include main header
 ```C
 #include <cglm/cglm.h>
 ```
-the header will include all headers. Then call the func you want e.g. rotate vector by axis:
+the header will include all headers. Then call func you want e.g. rotate vector by axis:
 ```C
 glm_vec3_rotate(v1, glm_rad(45), (vec3){1.0f, 0.0f, 0.0f});
 ```
@@ -232,7 +215,7 @@ glm_mat4_mul(m1, m2, m1);
 /* or */
 glm_mat4_mul(m1, m1, m1);
 ```
-the first two parameter are **[in]** and the last one is **[out]** parameter. After multiplying *m1* and *m2*, the result is stored in *m1*. This is why we send *m1* twice. You may store the result in a different matrix, this is just an example.
+the first two parameter are **[in]** and the last one is **[out]** parameter. After multiplied *m1* and *m2* the result is stored in *m1*. This is why we send *m1* twice. You may store result in different matrix, this just an example.
 
 ### Example: Computing MVP matrix
 
@@ -272,7 +255,7 @@ Option 2: Cast matrix to pointer type (also valid for multiple dimensional array
 glUniformMatrix4fv(location, 1, GL_FALSE, (float *)matrix);
 ```
 
-You can pass matrices the same way to other APIs e.g. Vulkan, DX...
+You can pass same way to another APIs e.g. Vulkan, DX...
 
 ## Notes
 

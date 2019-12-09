@@ -59,7 +59,7 @@ glmc_quat_normalize_to(versor q, versor dest) {
 CGLM_EXPORT
 void
 glmc_quat_normalize(versor q) {
-  glm_quat_normalize(q);
+  glm_quat_norm(q);
 }
 
 CGLM_EXPORT
@@ -162,12 +162,6 @@ CGLM_EXPORT
 void
 glmc_quat_lerp(versor from, versor to, float t, versor dest) {
   glm_quat_lerp(from, to, t, dest);
-}
-
-CGLM_EXPORT
-void
-glmc_quat_lerpc(versor from, versor to, float t, versor dest) {
-  glm_quat_lerpc(from, to, t, dest);
 }
 
 CGLM_EXPORT

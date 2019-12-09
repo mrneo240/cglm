@@ -134,8 +134,7 @@ Functions documentation
 
 .. c:function:: float  glm_vec4_norm(vec4 vec)
 
-    | euclidean norm (magnitude), also called L2 norm
-    | this will give magnitude of vector in euclidean space
+    norm (magnitude) of vec4
 
     Parameters:
       | *[in]*  **vec**   vector

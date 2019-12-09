@@ -7,12 +7,12 @@
 
 /*
  Macros:
-   GLMS_VEC4_ONE_INIT
-   GLMS_VEC4_BLACK_INIT
-   GLMS_VEC4_ZERO_INIT
-   GLMS_VEC4_ONE
-   GLMS_VEC4_BLACK
-   GLMS_VEC4_ZERO
+   GLM_VEC4_ONE_INIT
+   GLM_VEC4_BLACK_INIT
+   GLM_VEC4_ZERO_INIT
+   GLM_VEC4_ONE
+   GLM_VEC4_BLACK
+   GLM_VEC4_ZERO
 
  Functions:
    CGLM_INLINE vec4s glms_vec4(vec3s v3, float last);
@@ -24,8 +24,6 @@
    CGLM_INLINE float glms_vec4_dot(vec4s a, vec4s b);
    CGLM_INLINE float glms_vec4_norm2(vec4s v);
    CGLM_INLINE float glms_vec4_norm(vec4s v);
-   CGLM_INLINE float glms_vec4_norm_one(vec4s v);
-   CGLM_INLINE float glms_vec4_norm_inf(vec4s v);
    CGLM_INLINE vec4s glms_vec4_add(vec4s a, vec4s b);
    CGLM_INLINE vec4s glms_vec4_adds(vec4s v, float s);
    CGLM_INLINE vec4s glms_vec4_sub(vec4s a, vec4s b);
@@ -45,20 +43,10 @@
    CGLM_INLINE vec4s glms_vec4_inv(vec4s v);
    CGLM_INLINE vec4s glms_vec4_normalize(vec4s v);
    CGLM_INLINE float glms_vec4_distance(vec4s a, vec4s b);
-   CGLM_INLINE float glms_vec4_distance2(vec4s a, vec4s b);
    CGLM_INLINE vec4s glms_vec4_maxv(vec4s a, vec4s b);
    CGLM_INLINE vec4s glms_vec4_minv(vec4s a, vec4s b);
    CGLM_INLINE vec4s glms_vec4_clamp(vec4s v, float minVal, float maxVal);
    CGLM_INLINE vec4s glms_vec4_lerp(vec4s from, vec4s to, float t);
-   CGLM_INLINE vec4s glms_vec4_lerpc(vec4s from, vec4s to, float t);
-   CGLM_INLINE vec4s glms_vec4_mix(vec4s from, vec4s to, float t);
-   CGLM_INLINE vec4s glms_vec4_mixc(vec4s from, vec4s to, float t);
-   CGLM_INLINE vec4s glms_vec4_step_uni(float edge, vec4s x);
-   CGLM_INLINE vec4s glms_vec4_step(vec4s edge, vec4s x);
-   CGLM_INLINE vec4s glms_vec4_smoothstep_uni(float edge0, float edge1, vec4s x);
-   CGLM_INLINE vec4s glms_vec4_smoothstep(vec4s edge0, vec4s edge1, vec4s x);
-   CGLM_INLINE vec4s glms_vec4_smoothinterp(vec4s from, vec4s to, float t);
-   CGLM_INLINE vec4s glms_vec4_smoothinterpc(vec4s from, vec4s to, float t);
    CGLM_INLINE vec4s glms_vec4_cubic(float s);
    CGLM_INLINE vec4s glms_vec4_swizzle(vec4s v, int mask);
  */
@@ -72,9 +60,9 @@
 #include "../vec4.h"
 #include "vec4-ext.h"
 
-#define GLMS_VEC4_ONE_INIT   {GLM_VEC4_ONE_INIT}
-#define GLMS_VEC4_BLACK_INIT {GLM_VEC4_BLACK_INIT}
-#define GLMS_VEC4_ZERO_INIT  {GLM_VEC4_ZERO_INIT}
+#define GLMS_VEC4_ONE_INIT   {1.0f, 1.0f, 1.0f, 1.0f}
+#define GLMS_VEC4_BLACK_INIT {0.0f, 0.0f, 0.0f, 1.0f}
+#define GLMS_VEC4_ZERO_INIT  {0.0f, 0.0f, 0.0f, 0.0f}
 
 #define GLMS_VEC4_ONE        ((vec4s)GLM_VEC4_ONE_INIT)
 #define GLMS_VEC4_BLACK      ((vec4s)GLM_VEC4_BLACK_INIT)
@@ -180,7 +168,7 @@ glms_vec4_unpack(vec4 dst[], vec4s src[], size_t len) {
  */
 CGLM_INLINE
 vec4s
-glms_vec4_zero(void) {
+glms_vec4_zero() {
   vec4s r;
   glm_vec4_zero(r.raw);
   return r;
@@ -193,7 +181,7 @@ glms_vec4_zero(void) {
  */
 CGLM_INLINE
 vec4s
-glms_vec4_one(void) {
+glms_vec4_one() {
   vec4s r;
   glm_vec4_one(r.raw);
   return r;
@@ -241,45 +229,6 @@ CGLM_INLINE
 float
 glms_vec4_norm(vec4s v) {
   return glm_vec4_norm(v.raw);
-}
-
-/*!
- * @brief L1 norm of vec4
- * Also known as Manhattan Distance or Taxicab norm.
- * L1 Norm is the sum of the magnitudes of the vectors in a space.
- * It is calculated as the sum of the absolute values of the vector components.
- * In this norm, all the components of the vector are weighted equally.
- *
- * This computes:
- * R = |v[0]| + |v[1]| + |v[2]| + |v[3]|
- *
- * @param[in] v vector
- *
- * @return L1 norm
- */
-CGLM_INLINE
-float
-glms_vec4_norm_one(vec4s v) {
-  return glm_vec4_norm_one(v.raw);
-}
-
-/*!
- * @brief Infinity norm of vec4
- * Also known as Maximum norm.
- * Infinity Norm is the largest magnitude among each element of a vector.
- * It is calculated as the maximum of the absolute values of the vector components.
- *
- * This computes:
- * inf norm = max(|v[0]|, |v[1]|, |v[2]|, |v[3]|)
- *
- * @param[in] v vector
- *
- * @return Infinity norm
- */
-CGLM_INLINE
-float
-glms_vec4_norm_inf(vec4s v) {
-  return glm_vec4_norm_inf(v.raw);
 }
 
 /*!
@@ -552,19 +501,6 @@ glms_vec4_distance(vec4s a, vec4s b) {
   return glm_vec4_distance(a.raw, b.raw);
 }
 
-/**
- * @brief squared distance between two vectors
- *
- * @param[in] a vector1
- * @param[in] b vector2
- * @return returns squared distance
- */
-CGLM_INLINE
-float
-glms_vec4_distance2(vec4s a, vec4s b) {
-  return glm_vec4_distance2(a.raw, b.raw);
-}
-
 /*!
  * @brief max values of vectors
  *
@@ -611,13 +547,13 @@ glms_vec4_clamp(vec4s v, float minVal, float maxVal) {
 }
 
 /*!
- * @brief linear interpolation between two vectors
+ * @brief linear interpolation between two vector
  *
  * formula:  from + s * (to - from)
  *
  * @param[in]   from  from value
  * @param[in]   to    to value
- * @param[in]   t     interpolant (amount)
+ * @param[in]   t     interpolant (amount) clamped between 0 and 1
  * @returns           destination
  */
 CGLM_INLINE
@@ -625,158 +561,6 @@ vec4s
 glms_vec4_lerp(vec4s from, vec4s to, float t) {
   vec4s r;
   glm_vec4_lerp(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief linear interpolation between two vectors (clamped)
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from  from value
- * @param[in]   to    to value
- * @param[in]   t     interpolant (amount) clamped between 0 and 1
- * @returns           destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_lerpc(vec4s from, vec4s to, float t) {
-  vec4s r;
-  glm_vec4_lerpc(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief linear interpolation between two vectors
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from  from value
- * @param[in]   to    to value
- * @param[in]   t     interpolant (amount)
- * @returns           destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_mix(vec4s from, vec4s to, float t) {
-  vec4s r;
-  glm_vec4_mix(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief linear interpolation between two vectors (clamped)
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from  from value
- * @param[in]   to    to value
- * @param[in]   t     interpolant (amount) clamped between 0 and 1
- * @returns           destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_mixc(vec4s from, vec4s to, float t) {
-  vec4s r;
-  glm_vec4_mixc(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function (unidimensional)
- *
- * @param[in]   edge    threshold
- * @param[in]   x       value to test against threshold
- * @returns             0.0 if x < edge, else 1.0
- */
-CGLM_INLINE
-vec4s
-glms_vec4_step_uni(float edge, vec4s x) {
-  vec4s r;
-  glm_vec4_step_uni(edge, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function
- *
- * @param[in]   edge    threshold
- * @param[in]   x       value to test against threshold
- * @returns             0.0 if x < edge, else 1.0
- */
-CGLM_INLINE
-vec4s
-glms_vec4_step(vec4s edge, vec4s x) {
-  vec4s r;
-  glm_vec4_step(edge.raw, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function with a smooth transition (unidimensional)
- *
- * @param[in]   edge0   low threshold
- * @param[in]   edge1   high threshold
- * @param[in]   x       value to test against threshold
- * @returns             destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_smoothstep_uni(float edge0, float edge1, vec4s x) {
-  vec4s r;
-  glm_vec4_smoothstep_uni(edge0, edge1, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function with a smooth transition
- *
- * @param[in]   edge0   low threshold
- * @param[in]   edge1   high threshold
- * @param[in]   x       value to test against threshold
- * @returns             destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_smoothstep(vec4s edge0, vec4s edge1, vec4s x) {
-  vec4s r;
-  glm_vec4_smoothstep(edge0.raw, edge1.raw, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief smooth Hermite interpolation between two vectors
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from    from value
- * @param[in]   to      to value
- * @param[in]   t       interpolant (amount)
- * @returns             destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_smoothinterp(vec4s from, vec4s to, float t) {
-  vec4s r;
-  glm_vec4_smoothinterp(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief smooth Hermite interpolation between two vectors (clamped)
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from    from value
- * @param[in]   to      to value
- * @param[in]   t       interpolant (amount) clamped between 0 and 1
- * @returns             destination
- */
-CGLM_INLINE
-vec4s
-glms_vec4_smoothinterpc(vec4s from, vec4s to, float t) {
-  vec4s r;
-  glm_vec4_smoothinterpc(from.raw, to.raw, t, r.raw);
   return r;
 }
 

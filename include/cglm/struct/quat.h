@@ -11,7 +11,7 @@
    GLMS_QUAT_IDENTITY
 
  Functions:
-   CGLM_INLINE versors glms_quat_identity(void)
+   CGLM_INLINE versors glms_quat_identity()
    CGLM_INLINE void    glms_quat_identity_array(versor *q, size_t count)
    CGLM_INLINE versors glms_quat_init(float x, float y, float z, float w)
    CGLM_INLINE versors glms_quatv(float angle, vec3s axis)
@@ -33,7 +33,6 @@
    CGLM_INLINE mat3s   glms_quat_mat3(versors q)
    CGLM_INLINE mat3s   glms_quat_mat3t(versors q)
    CGLM_INLINE versors glms_quat_lerp(versors from, versors to, float t)
-   CGLM_INLINE versors glms_quat_lerpc(versors from, versors to, float t)
    CGLM_INLINE versors glms_quat_slerp(versors from, versors to, float t)
    CGLM_INLINE mat4s.  glms_quat_look(vec3s eye, versors ori)
    CGLM_INLINE versors glms_quat_for(vec3s dir, vec3s fwd, vec3s up)
@@ -62,7 +61,7 @@
  * ----------------------------------------------------------------------------
  */
 
-#define GLMS_QUAT_IDENTITY_INIT  {GLM_QUAT_IDENTITY_INIT}
+#define GLMS_QUAT_IDENTITY_INIT  GLM_QUAT_IDENTITY_INIT
 #define GLMS_QUAT_IDENTITY       ((versors)GLMS_QUAT_IDENTITY_INIT)
 
 /*!
@@ -72,7 +71,7 @@
  */
 CGLM_INLINE
 versors
-glms_quat_identity(void) {
+glms_quat_identity() {
   versors dest;
   glm_quat_identity(dest.raw);
   return dest;
@@ -373,7 +372,7 @@ glms_quat_mat3t(versors q) {
  *
  * @param[in]   from  from
  * @param[in]   to    to
- * @param[in]   t     interpolant (amount)
+ * @param[in]   t     interpolant (amount) clamped between 0 and 1
  * @returns  result quaternion
  */
 CGLM_INLINE
@@ -381,23 +380,6 @@ versors
 glms_quat_lerp(versors from, versors to, float t) {
   versors dest;
   glm_quat_lerp(from.raw, to.raw, t, dest.raw);
-  return dest;
-}
-
-/*!
- * @brief interpolates between two quaternions
- *        using linear interpolation (LERP)
- *
- * @param[in]   from  from
- * @param[in]   to    to
- * @param[in]   t     interpolant (amount) clamped between 0 and 1
- * @returns  result quaternion
- */
-CGLM_INLINE
-versors
-glms_quat_lerpc(versors from, versors to, float t) {
-  versors dest;
-  glm_quat_lerpc(from.raw, to.raw, t, dest.raw);
   return dest;
 }
 

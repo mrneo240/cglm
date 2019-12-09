@@ -35,7 +35,8 @@ test_hermite_plain(float s, float p0, float t0, float t1, float p1) {
        + t1 * (sss - ss);
 }
 
-TEST_IMPL(bezier) {
+void
+test_bezier(void **state) {
   float s, p0, p1, c0, c1, smc, Bs, Bs_plain;
 
   s        = test_rand();
@@ -49,18 +50,16 @@ TEST_IMPL(bezier) {
   Bs       = glm_bezier(s, p0, c0, c1, p1);
   Bs_plain = test_bezier_plain(s, p0, c0, c1, p1);
 
-  ASSERT(test_eq(Bs,  Bs_plain));
-  ASSERTIFY(test_assert_eqf(smc, Bs_plain))
-  ASSERTIFY(test_assert_eqf(Bs,  smc))
+  assert_true(glm_eq(Bs,  Bs_plain));
+  test_assert_eqf(smc, Bs_plain);
+  test_assert_eqf(Bs,  smc);
 
   /* test cubic hermite */
   smc      = glm_smc(s, GLM_HERMITE_MAT, (vec4){p0, p1, c0, c1});
   Bs       = glm_hermite(s, p0, c0, c1, p1);
   Bs_plain = test_hermite_plain(s, p0, c0, c1, p1);
 
-  ASSERT(test_eq(Bs,  Bs_plain));
-  ASSERT(test_eq(smc, Bs_plain));
-  ASSERT(test_eq(Bs,  smc));
-  
-  TEST_SUCCESS
+  assert_true(glm_eq(Bs,  Bs_plain));
+  assert_true(glm_eq(smc, Bs_plain));
+  assert_true(glm_eq(Bs,  smc));
 }

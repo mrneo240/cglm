@@ -19,13 +19,11 @@
    CGLM_INLINE vec3s glms_vec3(vec4s v4);
    CGLM_INLINE void  glms_vec3_pack(vec3s dst[], vec3 src[], size_t len);
    CGLM_INLINE void  glms_vec3_unpack(vec3 dst[], vec3s src[], size_t len);
-   CGLM_INLINE vec3s glms_vec3_zero(void);
-   CGLM_INLINE vec3s glms_vec3_one(void);
+   CGLM_INLINE vec3s glms_vec3_zero();
+   CGLM_INLINE vec3s glms_vec3_one();
    CGLM_INLINE float glms_vec3_dot(vec3s a, vec3s b);
    CGLM_INLINE float glms_vec3_norm2(vec3s v);
    CGLM_INLINE float glms_vec3_norm(vec3s v);
-   CGLM_INLINE float glms_vec3_norm_one(vec3s v);
-   CGLM_INLINE float glms_vec3_norm_inf(vec3s v);
    CGLM_INLINE vec3s glms_vec3_add(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_adds(vec3s a, float s);
    CGLM_INLINE vec3s glms_vec3_sub(vec3s a, vec3s b);
@@ -47,28 +45,19 @@
    CGLM_INLINE vec3s glms_vec3_normalize(vec3s v);
    CGLM_INLINE vec3s glms_vec3_cross(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_crossn(vec3s a, vec3s b);
+   CGLM_INLINE float glms_vec3_distance(vec3s a, vec3s b);
    CGLM_INLINE float glms_vec3_angle(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_rotate(vec3s v, float angle, vec3s axis);
    CGLM_INLINE vec3s glms_vec3_rotate_m4(mat4s m, vec3s v);
    CGLM_INLINE vec3s glms_vec3_rotate_m3(mat3s m, vec3s v);
    CGLM_INLINE vec3s glms_vec3_proj(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_center(vec3s a, vec3s b);
-   CGLM_INLINE float glms_vec3_distance(vec3s a, vec3s b);
    CGLM_INLINE float glms_vec3_distance2(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_maxv(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_minv(vec3s a, vec3s b);
    CGLM_INLINE vec3s glms_vec3_ortho(vec3s v);
    CGLM_INLINE vec3s glms_vec3_clamp(vec3s v, float minVal, float maxVal);
    CGLM_INLINE vec3s glms_vec3_lerp(vec3s from, vec3s to, float t);
-   CGLM_INLINE vec3s glms_vec3_lerpc(vec3s from, vec3s to, float t);
-   CGLM_INLINE vec3s glms_vec3_mix(vec3s from, vec3s to, float t);
-   CGLM_INLINE vec3s glms_vec3_mixc(vec3s from, vec3s to, float t);
-   CGLM_INLINE vec3s glms_vec3_step_uni(float edge, vec3s x);
-   CGLM_INLINE vec3s glms_vec3_step(vec3s edge, vec3s x);
-   CGLM_INLINE vec3s glms_vec3_smoothstep_uni(float edge0, float edge1, vec3s x);
-   CGLM_INLINE vec3s glms_vec3_smoothstep(vec3s edge0, vec3s edge1, vec3s x);
-   CGLM_INLINE vec3s glms_vec3_smoothinterp(vec3s from, vec3s to, float t);
-   CGLM_INLINE vec3s glms_vec3_smoothinterpc(vec3s from, vec3s to, float t);
    CGLM_INLINE vec3s glms_vec3_swizzle(vec3s v, int mask);
 
  Convenient:
@@ -86,15 +75,15 @@
 #include "../vec3.h"
 #include "vec3-ext.h"
 
-#define GLMS_VEC3_ONE_INIT   {GLM_VEC3_ONE_INIT}
-#define GLMS_VEC3_ZERO_INIT  {GLM_VEC3_ZERO_INIT}
+#define GLMS_VEC3_ONE_INIT   {1.0f, 1.0f, 1.0f}
+#define GLMS_VEC3_ZERO_INIT  {0.0f, 0.0f, 0.0f}
 
 #define GLMS_VEC3_ONE  ((vec3s)GLMS_VEC3_ONE_INIT)
 #define GLMS_VEC3_ZERO ((vec3s)GLMS_VEC3_ZERO_INIT)
 
-#define GLMS_YUP  ((vec3s){{0.0f, 1.0f, 0.0f}})
-#define GLMS_ZUP  ((vec3s){{0.0f, 0.0f, 1.0f}})
-#define GLMS_XUP  ((vec3s){{1.0f, 0.0f, 0.0f}})
+#define GLMS_YUP  ((vec3s){0.0f, 1.0f, 0.0f})
+#define GLMS_ZUP  ((vec3s){0.0f, 0.0f, 1.0f})
+#define GLMS_XUP  ((vec3s){1.0f, 0.0f, 0.0f})
 
 /*!
  * @brief init vec3 using vec4
@@ -151,7 +140,7 @@ glms_vec3_unpack(vec3 dst[], vec3s src[], size_t len) {
  */
 CGLM_INLINE
 vec3s
-glms_vec3_zero(void) {
+glms_vec3_zero() {
   vec3s r;
   glm_vec3_zero(r.raw);
   return r;
@@ -164,7 +153,7 @@ glms_vec3_zero(void) {
  */
 CGLM_INLINE
 vec3s
-glms_vec3_one(void) {
+glms_vec3_one() {
   vec3s r;
   glm_vec3_one(r.raw);
   return r;
@@ -212,45 +201,6 @@ CGLM_INLINE
 float
 glms_vec3_norm(vec3s v) {
   return glm_vec3_norm(v.raw);
-}
-
-/*!
- * @brief L1 norm of vec3
- * Also known as Manhattan Distance or Taxicab norm.
- * L1 Norm is the sum of the magnitudes of the vectors in a space.
- * It is calculated as the sum of the absolute values of the vector components.
- * In this norm, all the components of the vector are weighted equally.
- *
- * This computes:
- * R = |v[0]| + |v[1]| + |v[2]|
- *
- * @param[in] v vector
- *
- * @return L1 norm
- */
-CGLM_INLINE
-float
-glms_vec3_norm_one(vec3s v) {
-  return glm_vec3_norm_one(v.raw);
-}
-
-/*!
- * @brief Infinity norm of vec3
- * Also known as Maximum norm.
- * Infinity Norm is the largest magnitude among each element of a vector.
- * It is calculated as the maximum of the absolute values of the vector components.
- *
- * This computes:
- * inf norm = max(|v[0]|, |v[1]|, |v[2]|)
- *
- * @param[in] v vector
- *
- * @return Infinity norm
- */
-CGLM_INLINE
-float
-glms_vec3_norm_inf(vec3s v) {
-  return glm_vec3_norm_inf(v.raw);
 }
 
 /*!
@@ -649,19 +599,6 @@ glms_vec3_center(vec3s a, vec3s b) {
 }
 
 /**
- * @brief distance between two vectors
- *
- * @param[in] a vector1
- * @param[in] b vector2
- * @return      distance
- */
-CGLM_INLINE
-float
-glms_vec3_distance(vec3s a, vec3s b) {
-  return glm_vec3_distance(a.raw, b.raw);
-}
-
-/**
  * @brief squared distance between two vectors
  *
  * @param[in] a vector1
@@ -672,6 +609,19 @@ CGLM_INLINE
 float
 glms_vec3_distance2(vec3s a, vec3s b) {
   return glm_vec3_distance2(a.raw, b.raw);
+}
+
+/**
+ * @brief distance between two vectors
+ *
+ * @param[in] a vector1
+ * @param[in] b vector2
+ * @return      distance
+ */
+CGLM_INLINE
+float
+glms_vec3_distance(vec3s a, vec3s b) {
+  return glm_vec3_distance(a.raw, b.raw);
 }
 
 /*!
@@ -734,13 +684,13 @@ glms_vec3_clamp(vec3s v, float minVal, float maxVal) {
 }
 
 /*!
- * @brief linear interpolation between two vectors
+ * @brief linear interpolation between two vector
  *
  * formula:  from + s * (to - from)
  *
  * @param[in]   from  from value
  * @param[in]   to    to value
- * @param[in]   t     interpolant (amount)
+ * @param[in]   t     interpolant (amount) clamped between 0 and 1
  * @returns           destination
  */
 CGLM_INLINE
@@ -748,158 +698,6 @@ vec3s
 glms_vec3_lerp(vec3s from, vec3s to, float t) {
   vec3s r;
   glm_vec3_lerp(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief linear interpolation between two vectors (clamped)
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from  from value
- * @param[in]   to    to value
- * @param[in]   t     interpolant (amount) clamped between 0 and 1
- * @returns           destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_lerpc(vec3s from, vec3s to, float t) {
-  vec3s r;
-  glm_vec3_lerpc(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief linear interpolation between two vectors
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from  from value
- * @param[in]   to    to value
- * @param[in]   t     interpolant (amount)
- * @returns           destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_mix(vec3s from, vec3s to, float t) {
-  vec3s r;
-  glm_vec3_mix(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief linear interpolation between two vectors (clamped)
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from  from value
- * @param[in]   to    to value
- * @param[in]   t     interpolant (amount) clamped between 0 and 1
- * @returns           destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_mixc(vec3s from, vec3s to, float t) {
-  vec3s r;
-  glm_vec3_mixc(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function (unidimensional)
- *
- * @param[in]   edge    threshold
- * @param[in]   x       value to test against threshold
- * @returns             0.0 if x < edge, else 1.0
- */
-CGLM_INLINE
-vec3s
-glms_vec3_step_uni(float edge, vec3s x) {
-  vec3s r;
-  glm_vec3_step_uni(edge, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function
- *
- * @param[in]   edge    threshold
- * @param[in]   x       value to test against threshold
- * @returns             0.0 if x < edge, else 1.0
- */
-CGLM_INLINE
-vec3s
-glms_vec3_step(vec3s edge, vec3s x) {
-  vec3s r;
-  glm_vec3_step(edge.raw, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function with a smooth transition (unidimensional)
- *
- * @param[in]   edge0   low threshold
- * @param[in]   edge1   high threshold
- * @param[in]   x       value to test against threshold
- * @returns             destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_smoothstep_uni(float edge0, float edge1, vec3s x) {
-  vec3s r;
-  glm_vec3_smoothstep_uni(edge0, edge1, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief threshold function with a smooth transition
- *
- * @param[in]   edge0   low threshold
- * @param[in]   edge1   high threshold
- * @param[in]   x       value to test against threshold
- * @returns             destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_smoothstep(vec3s edge0, vec3s edge1, vec3s x) {
-  vec3s r;
-  glm_vec3_smoothstep(edge0.raw, edge1.raw, x.raw, r.raw);
-  return r;
-}
-
-/*!
- * @brief smooth Hermite interpolation between two vectors
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from    from value
- * @param[in]   to      to value
- * @param[in]   t       interpolant (amount)
- * @returns             destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_smoothinterp(vec3s from, vec3s to, float t) {
-  vec3s r;
-  glm_vec3_smoothinterp(from.raw, to.raw, t, r.raw);
-  return r;
-}
-
-/*!
- * @brief smooth Hermite interpolation between two vectors (clamped)
- *
- * formula:  from + s * (to - from)
- *
- * @param[in]   from    from value
- * @param[in]   to      to value
- * @param[in]   t       interpolant (amount) clamped between 0 and 1
- * @returns             destination
- */
-CGLM_INLINE
-vec3s
-glms_vec3_smoothinterpc(vec3s from, vec3s to, float t) {
-  vec3s r;
-  glm_vec3_smoothinterpc(from.raw, to.raw, t, r.raw);
   return r;
 }
 

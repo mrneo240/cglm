@@ -1,7 +1,10 @@
 Build cglm
 ================================
 
-| **cglm** does not have any external dependencies.
+| **cglm** does not have external dependencies except for unit testing. When you pulled **cglm** repo with submodules all dependencies will be pulled too. `build-deps.sh` will pull all dependencies/submodules and build for you.
+
+External dependencies:
+  * cmocka - for unit testing
 
 **NOTE:**
 If you only need to inline versions, you don't need to build **cglm**, you don't need to link it to your program.
@@ -12,6 +15,8 @@ Unix (Autotools):
 
 .. code-block:: bash
   :linenos:
+
+  $ sh ./build-deps.sh    # run this only once (dependencies)
 
   $ sh autogen.sh
   $ ./configure
@@ -60,3 +65,4 @@ Example build:
 
   $ cd cglm/docs
   $ sphinx-build source build
+

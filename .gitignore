@@ -51,6 +51,7 @@ cscope.*
 test/*.trs
 test/test_*
 *.log
+test-*
 test/.libs/*
 test/tests
 cglm_arm/*
@@ -70,5 +71,3 @@ win/x85
 win/Debug
 cglm-test-ios*
 /cglm.pc
-test-driver
-Default-568h@2x.png
