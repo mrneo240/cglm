@@ -32,6 +32,8 @@
 #define GLM_SHUFFLE3(z, y, x)    (((z) << 4) | ((y) << 2) | (x))
 
 #include "types.h"
+#ifndef _arch_dreamcast
 #include "simd/intrin.h"
+#endif
 
 #endif /* cglm_common_h */
