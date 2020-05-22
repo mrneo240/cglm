@@ -438,7 +438,7 @@ glm_vec2_normalize(vec2 v) {
   norm = glm_vec2_norm(v);
 
   if (norm == 0.0f) {
-    v[0] = v[1] = v[2] = 0.0f;
+    v[0] = v[1] = 0.0f;
     return;
   }
 
